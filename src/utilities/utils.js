@@ -29,7 +29,7 @@ export const sortData = (filteredResponse, sortByAreaPopulation, sortFeild) => {
 };
 
 // Function to fetch data from API
-export const fetchData = async (url, setCardsData, setRegion, setLoading, setError) => {
+export const fetchData = async (url, setCardsData, setRegion) => {
   try {
     const res = await fetch(`${url}/all`);
     if (!res.ok) throw new Error("Network response was not ok");
@@ -43,11 +43,7 @@ export const fetchData = async (url, setCardsData, setRegion, setLoading, setErr
       return acc;
     }, []);
     setRegion(getRegion);
-
-    setLoading(false);
   } catch (error) {
-    setLoading(false);
-    setError(error.message);
   }
 };
 
