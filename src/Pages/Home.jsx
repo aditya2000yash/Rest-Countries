@@ -12,14 +12,12 @@ const HomePage = () => {
   const [selectedRegion, setSelectedRegion] = useState("");
   const [subregion, setSubregion] = useState([]);
   const [selectedSubregion, setSelectedSubregion] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [sortByAreaPopulation, setSortByAreaPopulation] = useState("");
   const [sortFeild, setSortFeild] = useState("");
 
   const selectHandler = (e) => {
     setSelectedRegion(e.target.value);
-    setSelectedSubregion(""); // Reset subregion when a new region is selected
+    setSelectedSubregion(""); // Reset's the subregion when a new region is selected
 
     let getSubregion = cardsdata.reduce((acc, item) => {
       if (item.region === e.target.value && !acc.includes(item.subregion)) {
@@ -50,8 +48,7 @@ const HomePage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      // Use the utility function to fetch data
-      fetchData(url, setCardsData, setRegion, setLoading, setError);
+      fetchData(url, setCardsData, setRegion);
     }, 500);
   }, []);
 
