@@ -36,7 +36,7 @@ const DetailsPage = () => {
 
         {country && (
           <div className="flex max-md:flex-col gap-10 items-center">
-            <div className="w-full lg:w-[60rem] lg:h-[30rem]">
+            <div className="w-full lg:w-[50rem] lg:h-[30rem]">
               <img
                 className="w-full h-full"
                 src={country.flags.png}
@@ -101,7 +101,7 @@ const DetailsPage = () => {
                       <button
                         key={index}
                         onClick={() => navigate(`/country/${border}`)}
-                        className="m-1 p-2 border border-gray-300 rounded card shadow-lg"
+                        className="m-2 p-2 border border-gray-300 rounded card shadow-lg"
                       >
                         {border}
                       </button>
