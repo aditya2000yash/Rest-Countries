@@ -50,7 +50,7 @@ const HomePage = () => {
     setTimeout(() => {
       fetchData(url, setCardsData, setRegion);
     }, 500);
-  }, []);
+  }, [url]);
 
   return (
     <>

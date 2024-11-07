@@ -17,7 +17,6 @@ const DetailsPage = () => {
       setError(null);
     } catch (error) {
       setError("Could not fetch country data. Please try again later.");
-      console.error("Fetch error:", error);
     }
   };
 
