@@ -1,27 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-const url=import.meta.env.VITE_URL;
+const url = import.meta.env.VITE_URL;
 
 const DetailsPage = () => {
   const [country, setCountry] = useState(null);
+  const [borderCountries, setBorderCountries] = useState([]); 
   const [error, setError] = useState(null);
   const { code } = useParams();
   const navigate = useNavigate();
 
-  const performApiCall = async () => {
+  const fetchCountryData = async () => {
     try {
       const res = await fetch(`${url}/alpha/${code}`);
       if (!res.ok) throw new Error("Network response was not ok");
       const data = await res.json();
       setCountry(data[0]);
       setError(null);
+      if (data[0].borders) {
+        fetchBorderCountries(data[0].borders);
+      }
     } catch (error) {
       setError("Could not fetch country data. Please try again later.");
     }
   };
 
+  const fetchBorderCountries = async (borderCodes) => {
+    try {
+      const borderCountryPromises = borderCodes.map((borderCode) =>
+        fetch(`${url}/alpha/${borderCode}`).then((res) => res.json())
+      );
+      const borderCountryResponses = await Promise.all(borderCountryPromises);
+      const borderCountryNames = borderCountryResponses.map(
+        (countryData) => countryData[0].name.common
+      );
+      setBorderCountries(borderCountryNames);
+    } catch (error) {
+      setError("Could not fetch border countries' data. Please try again later.");
+    }
+  };
+
   useEffect(() => {
-    performApiCall();
+    fetchCountryData();
   }, [code]);
 
   if (error) return <div>{error}</div>;
@@ -44,7 +63,7 @@ const DetailsPage = () => {
             </div>
             <div className="flex flex-col gap-10">
               <p className="text-3xl font-bold">{country.name.common}</p>
-              <div className="flex  max-lg:flex-col gap-10">
+              <div className="flex max-lg:flex-col gap-10">
                 <div>
                   <p>
                     <strong>Native Name:</strong>{" "}
@@ -95,8 +114,8 @@ const DetailsPage = () => {
                   <strong>Border Countries:</strong>
                 </p>
                 <div>
-                  {country.borders ? (
-                    country.borders.map((border, index) => (
+                  {borderCountries.length > 0 ? (
+                    borderCountries.map((border, index) => (
                       <button
                         key={index}
                         onClick={() => navigate(`/country/${border}`)}
