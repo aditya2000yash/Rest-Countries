@@ -9,7 +9,7 @@ const CardsContainer = ({ item }) => {
     >
       <img
         src={item.flags.png}
-        alt={item.flags.alt}
+        alt={item.flags.alt || `${item.name.common} flag`}  // Fallback alt text
         className="h-[13rem] w-full rounded-t-md object-cover"
       />
       <div className="p-5 flex flex-col gap-2">
@@ -23,7 +23,7 @@ const CardsContainer = ({ item }) => {
           <strong>Region: </strong> {item.region}
         </p>
         <p>
-          <strong>Capital: </strong> {item.capital}
+          <strong>Capital: </strong> {item.capital ? item.capital : "N/A"}
         </p>
         <p>
           <strong>Area: </strong> {item.area.toLocaleString()} km²
@@ -34,3 +34,4 @@ const CardsContainer = ({ item }) => {
 };
 
 export default CardsContainer;
+

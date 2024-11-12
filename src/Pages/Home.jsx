@@ -14,6 +14,9 @@ const HomePage = () => {
   const [selectedSubregion, setSelectedSubregion] = useState("");
   const [sortByAreaPopulation, setSortByAreaPopulation] = useState("");
   const [sortFeild, setSortFeild] = useState("");
+  const [currencies, setCurrencies] = useState([]); 
+  const [selectedCurrency, setSelectedCurrency] = useState(""); 
+  
 
   const selectHandler = (e) => {
     setSelectedRegion(e.target.value);
@@ -31,6 +34,8 @@ const HomePage = () => {
 
   const subregionSelect = (e) => setSelectedSubregion(e.target.value);
 
+  const currencySelect = (e) => setSelectedCurrency(e.target.value);
+
   const sortFieldFunction = (e) => {
     setSortByAreaPopulation(e.target.value);
     setSortFeild("");
@@ -39,7 +44,7 @@ const HomePage = () => {
   const sortFunctionByValue = (e) => setSortFeild(e.target.value);
 
   // Use the utility function to filter data
-  let filteredResponse = filterData(cardsdata, inputSearch, selectedRegion, selectedSubregion);
+  let filteredResponse = filterData(cardsdata, inputSearch, selectedRegion, selectedSubregion, selectedCurrency);
 
   // Use the utility function to sort data
   filteredResponse = sortData(filteredResponse, sortByAreaPopulation, sortFeild);
@@ -48,7 +53,7 @@ const HomePage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      fetchData(url, setCardsData, setRegion);
+      fetchData(url, setCardsData, setRegion,setCurrencies);
     }, 500);
   }, [url]);
 
@@ -67,10 +72,16 @@ const HomePage = () => {
         sortFieldFunction={sortFieldFunction}
         sortFeild={sortFeild}
         sortFunctionByValue={sortFunctionByValue}
+        currencies={currencies}
+        selectedCurrency={selectedCurrency}
+        currencySelect={currencySelect}
       />
       <CardsList filteredResponse={filteredResponse} />
     </>
   );
 };
 
-export default HomePage;
+export default HomePage; 
+
+
+

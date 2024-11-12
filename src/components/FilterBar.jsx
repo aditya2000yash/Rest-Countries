@@ -1,5 +1,3 @@
-import React from "react";
-
 const FilterBar = ({
   inputSearch,
   setInputSearch,
@@ -13,6 +11,9 @@ const FilterBar = ({
   sortFieldFunction,
   sortFeild,
   sortFunctionByValue,
+  currencies,
+  selectedCurrency,
+  currencySelect,
 }) => {
   return (
     <div className="flex justify-around items-center px-[10rem] max-sm:px-3 mt-6 max-md:flex-col font-[600] max-md:gap-2 overflow-hidden flex-wrap gap-2">
@@ -69,8 +70,22 @@ const FilterBar = ({
         <option value="low">Low to High</option>
         <option value="high">High to Low</option>
       </select>
+
+      {/* Currency Dropdown */}
+      <select
+        className="px-7 shadow-lg h-[3rem] rounded-md region-filter max-md:w-[70vw] max-sm:mt-2"
+        onChange={currencySelect}
+        value={selectedCurrency}
+      >
+        <option value="All">All Currencies</option>
+        {currencies.map((currency, idx) => (
+          <option key={idx} value={currency}>
+            {currency}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
 
-export default FilterBar;
+export default FilterBar; 
