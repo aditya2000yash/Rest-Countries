@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 const url = import.meta.env.VITE_URL;
 
 const DetailsPage = () => {
   const [country, setCountry] = useState(null);
   const [borderCountries, setBorderCountries] = useState([]); 
   const [error, setError] = useState(null);
-  const { code } = useParams();
-  const navigate = useNavigate();
+  const { code } = useParams();  // Get the country code from the URL
+  const navigate = useNavigate();  // For navigating to border country pages
 
+  // Fetch the country data
   const fetchCountryData = async () => {
     try {
       const res = await fetch(`${url}/alpha/${code}`);
@@ -16,7 +18,9 @@ const DetailsPage = () => {
       const data = await res.json();
       setCountry(data[0]);
       setError(null);
+      
       if (data[0].borders) {
+        // Fetch border countries if the country has borders
         fetchBorderCountries(data[0].borders);
       }
     } catch (error) {
@@ -24,25 +28,33 @@ const DetailsPage = () => {
     }
   };
 
+  // Fetch border countries' data
   const fetchBorderCountries = async (borderCodes) => {
     try {
       const borderCountryPromises = borderCodes.map((borderCode) =>
         fetch(`${url}/alpha/${borderCode}`).then((res) => res.json())
       );
+      
       const borderCountryResponses = await Promise.all(borderCountryPromises);
-      const borderCountryNames = borderCountryResponses.map(
-        (countryData) => countryData[0].name.common
-      );
-      setBorderCountries(borderCountryNames);
+      
+      // Collect both country names and their codes (cca3 or cca2)
+      const borderCountryNamesAndCodes = borderCountryResponses.map((countryData) => ({
+        name: countryData[0].name.common,
+        code: countryData[0].cca3,  // Use cca3 code (ISO 3166-1 alpha-3 code)
+      }));
+
+      setBorderCountries(borderCountryNamesAndCodes);
     } catch (error) {
       setError("Could not fetch border countries' data. Please try again later.");
     }
   };
 
   useEffect(() => {
+    // Fetch the country data whenever the 'code' param changes
     fetchCountryData();
   }, [code]);
 
+  // If there is an error, show the error message
   if (error) return <div>{error}</div>;
 
   return (
@@ -118,10 +130,10 @@ const DetailsPage = () => {
                     borderCountries.map((border, index) => (
                       <button
                         key={index}
-                        onClick={() => navigate(`/country/${border}`)}
+                        onClick={() => navigate(`/country/${border.code}`)}  // Navigate using the border's code
                         className="m-2 p-2 border border-gray-300 rounded card shadow-lg"
                       >
-                        {border}
+                        {border.name}
                       </button>
                     ))
                   ) : (
