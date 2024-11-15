@@ -89,3 +89,6 @@ const FilterBar = ({
 };
 
 export default FilterBar; 
+
+// src/components/FilterBar.jsx
+

@@ -36,34 +36,45 @@ export const sortData = (filteredResponse, sortByAreaPopulation, sortFeild) => {
 };
 
 // Function to fetch data from API
-export const fetchData = async (url, setCardsData, setRegion, setCurrencies) => {
-  try {
-    const res = await fetch(`${url}/all`);
-    if (!res.ok) throw new Error("Network response was not ok");
-    const data = await res.json();
+// export const fetchData = async (url, setCardsData, setRegion, setCurrencies) => {
+//   try {
+//     const res = await fetch(`${url}/all`);
+//     if (!res.ok) throw new Error("Network response was not ok");
+//     const data = await res.json();
     
-    setCardsData(data);
+//     setCardsData(data);
 
-    // Get unique regions
-    let getRegion = data.reduce((acc, item) => {
-      if (!acc.includes(item.region)) acc.push(item.region);
-      return acc;
-    }, []);
-    setRegion(getRegion);
-    let allCurrencies = ["All"]; 
-    data.forEach(item => {
-      if (item.currencies) {
-        Object.values(item.currencies).forEach(currency => {
-          if (!allCurrencies.includes(currency.name)) {
-            allCurrencies.push(currency.name);
-          }
-        });
-      }
-    });
-    setCurrencies(allCurrencies); 
+//     // Get unique regions
+//     let getRegion = data.reduce((acc, item) => {
+//       if (!acc.includes(item.region)) acc.push(item.region);
+//       return acc;
+//     }, []);
+//     setRegion(getRegion);
+//     let allCurrencies = ["All"]; 
+//     data.forEach(item => {
+//       if (item.currencies) {
+//         Object.values(item.currencies).forEach(currency => {
+//           if (!allCurrencies.includes(currency.name)) {
+//             allCurrencies.push(currency.name);
+//           }
+//         });
+//       }
+//     });
+//     setCurrencies(allCurrencies); 
 
-  } catch (error) {
-    console.error(error);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+export const fetchData = async (url) => {
+  try {
+        const res = await fetch(`${url}/all`);
+        if (!res.ok) throw new Error("Network response was not ok");
+        const data = await res.json();
+        return data;        
   }
-};
-
+  catch (error) {
+        console.error(error);
+      }
+}

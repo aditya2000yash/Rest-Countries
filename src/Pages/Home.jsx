@@ -5,18 +5,48 @@ import CardsList from "../components/CardsList";
 // Import utility functions
 import { filterData, sortData, fetchData } from "../utilities/utils";
 
+
 const HomePage = () => {
   const [cardsdata, setCardsData] = useState([]);
-  const [region, setRegion] = useState([]);
+  // const [region, setRegion] = useState([]);
   const [inputSearch, setInputSearch] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
   const [subregion, setSubregion] = useState([]);
   const [selectedSubregion, setSelectedSubregion] = useState("");
   const [sortByAreaPopulation, setSortByAreaPopulation] = useState("");
   const [sortFeild, setSortFeild] = useState("");
-  const [currencies, setCurrencies] = useState([]); 
+  // const [currencies, setCurrencies] = useState([]); 
   const [selectedCurrency, setSelectedCurrency] = useState(""); 
   
+  const url = import.meta.env.VITE_URL;
+
+  useEffect(() => {
+    async function getData(){
+      await fetchData(url)
+      .then((res) => {
+        setCardsData(res);
+  
+      }).catch((err) => {
+        console.log(err);
+      })
+  }
+  getData();
+  },[]);
+
+  const region=cardsdata
+  .map(country => country.region)
+  .filter((region, index, self) => self.indexOf(region) === index);
+
+  let currencies = [];
+  cardsdata.map((country) => {
+    let curr = country.currencies;
+    for(let key in curr){
+      if(!currencies.includes(curr[key].name)){
+      currencies.push(curr[key].name);
+      }
+    }
+  })
+
 
   const selectHandler = (e) => {
     setSelectedRegion(e.target.value);
@@ -49,13 +79,12 @@ const HomePage = () => {
   // Use the utility function to sort data
   filteredResponse = sortData(filteredResponse, sortByAreaPopulation, sortFeild);
 
-  const url = import.meta.env.VITE_URL;
 
-  useEffect(() => {
-    setTimeout(() => {
-      fetchData(url, setCardsData, setRegion,setCurrencies);
-    }, 500);
-  }, [url]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     fetchData(url, setCardsData, setRegion,setCurrencies);
+  //   }, 500);
+  // }, [url]);
 
   return (
     <>
@@ -82,6 +111,3 @@ const HomePage = () => {
 };
 
 export default HomePage; 
-
-
-
